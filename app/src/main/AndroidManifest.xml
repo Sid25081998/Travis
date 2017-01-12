@@ -20,6 +20,12 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".SignIn"
+            android:label="Travis - Sign In"/>
+
+        <activity android:name=".SignUp"
+            android:label="Travis - Sign Up"/>
+
         <activity
             android:name=".FeedsActivity"
             android:label="@string/app_name">
@@ -30,8 +36,6 @@
         </activity>
 
         <activity android:name=".UserProfile" />
-        <activity android:name=".SignIn" />
-        <activity android:name=".SignUp"></activity>
         <activity
             android:name=".ProfileActivity"
             android:label="@string/app_name">

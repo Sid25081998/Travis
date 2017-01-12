@@ -50,17 +50,15 @@ public class SignUp extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private StorageReference mStorageRef ;
-
-
     Uri selectedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_sign_up);
         mAuth = FirebaseAuth.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference();
-
 
         imagesetter = (CircularImageView) findViewById(R.id.image);
         uploadphotolabel = (TextView) findViewById(R.id.upload_label);
@@ -70,7 +68,6 @@ public class SignUp extends AppCompatActivity {
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
         village = (EditText) findViewById(R.id.village);
-
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -85,11 +82,8 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
-
             }
         });
-
-
 
         Signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,13 +114,9 @@ public class SignUp extends AppCompatActivity {
                                     // the auth state listener will be notified and logic to handle the
                                     // signed in user can be handled in the listener.
                                     if (!task.isSuccessful()) {
-                                        Toast.makeText(getBaseContext(), "Task unsuccessful" + task.getException(),
-                                                Toast.LENGTH_SHORT).show();
-
-
+                                        Toast.makeText(getBaseContext(), "Sign Up Unsuccessful" + task.getException(), Toast.LENGTH_SHORT).show();
                                     }else {
-                                        Toast.makeText(getBaseContext(), "Task Successful",
-                                                Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(getBaseContext(), "Task Successful", Toast.LENGTH_SHORT).show();
                                         try {
 
                                             StorageReference filepath = mStorageRef.child("photos and videos").child(task.getResult().getUser().getUid());
@@ -144,8 +134,6 @@ public class SignUp extends AppCompatActivity {
                                                         mDatabase.child("people").child(task.getResult().getUser().getUid()).child("displayNames").setValue(namestring);
                                                         mDatabase.child("people").child(task.getResult().getUser().getUid()).child("photoUrls").setValue(taskSnapshot.getDownloadUrl().toString());
                                                         mDatabase.child("people").child(task.getResult().getUser().getUid()).child("points").setValue("0");
-
-
                                                     }
                                                 });
                                             }else{
@@ -170,15 +158,12 @@ public class SignUp extends AppCompatActivity {
                                         }
 
                                         Intent i = new Intent(SignUp.this,SignIn.class);
+                                        Toast.makeText(SignUp.this, "Account Successfully Created. Sign In for Security Purpose.", Toast.LENGTH_LONG).show();
                                         startActivity(i);
                                     }
-
                                 }
                             });
-
                 }
-
-
             }
         });
     }
@@ -186,8 +171,6 @@ public class SignUp extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
         //Detects request codes
         if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             selectedImage = data.getData();
