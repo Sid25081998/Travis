@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +39,8 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import dheeraj.com.trafficsolution.Activities.LoginRegisterChoose;
 
 public class ProfileActivity extends BaseActivity implements View.OnClickListener,
         GoogleApiClient.OnConnectionFailedListener {
