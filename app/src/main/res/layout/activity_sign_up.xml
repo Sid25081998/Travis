@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:text="Upload Photo"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="25sp"
+        android:textSize="22dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/image"
         android:id="@+id/upload_label" />
@@ -94,7 +94,7 @@
                 android:id="@+id/signup1"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/custom_button_gray"
                 android:text="Sign up"
                 android:textSize="16dp"
                 android:textColor="#fff"
@@ -105,22 +105,15 @@
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"/>
             <TextView
-                android:id="@+id/acc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Already have account?"
-                android:layout_above="@+id/signinhere"
-                android:gravity="center"
-                android:lines="1" />
-            <TextView
                 android:id="@+id/signinhere"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Signin here"
+                android:text="Already have an Account? Sign In Here"
                 android:textColor="@color/colorPrimary"
                 android:layout_alignParentBottom="true"
                 android:gravity="center"
                 android:lines="1"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="22dp" />
             />
         </LinearLayout>

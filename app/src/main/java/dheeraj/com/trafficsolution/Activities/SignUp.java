@@ -1,13 +1,15 @@
-package dheeraj.com.trafficsolution;
+package dheeraj.com.trafficsolution.Activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +32,8 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import dheeraj.com.trafficsolution.R;
 
 public class SignUp extends AppCompatActivity {
 
@@ -56,19 +60,10 @@ public class SignUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_sign_up);
+        init();
+
         mAuth = FirebaseAuth.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference();
-
-        imagesetter = (CircularImageView) findViewById(R.id.image);
-        uploadphotolabel = (TextView) findViewById(R.id.upload_label);
-        signintent = (TextView) findViewById(R.id.signinhere);
-        Signup = (Button) findViewById(R.id.signup1);
-        name = (EditText) findViewById(R.id.username);
-        email = (EditText) findViewById(R.id.email);
-        password = (EditText) findViewById(R.id.password);
-        village = (EditText) findViewById(R.id.village);
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         imagesetter.setOnClickListener(new View.OnClickListener() {
@@ -104,19 +99,24 @@ public class SignUp extends AppCompatActivity {
                     email.setError("You can not leave this field empty");
                 } else {
 
+                    final ProgressDialog rd = new ProgressDialog(SignUp.this);
+                    rd.setTitle("Please Wait!");
+                    rd.setMessage("Creating Your Account...");
+                    rd.setCancelable(false);
+                    rd.show();
+
                     mAuth.createUserWithEmailAndPassword(emailString, passwordString)
                             .addOnCompleteListener(SignUp.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull final Task<AuthResult> task) {
                                     Log.d("TAG", "createUserWithEmail:onComplete:" + task.isSuccessful());
 
-                                    // If sign in fails, display a message to the user. If sign in succeeds
-                                    // the auth state listener will be notified and logic to handle the
-                                    // signed in user can be handled in the listener.
+
                                     if (!task.isSuccessful()) {
                                         Toast.makeText(getBaseContext(), "Sign Up Unsuccessful" + task.getException(), Toast.LENGTH_SHORT).show();
+                                        rd.cancel();
                                     }else {
-                                        //Toast.makeText(getBaseContext(), "Task Successful", Toast.LENGTH_SHORT).show();
+
                                         try {
 
                                             StorageReference filepath = mStorageRef.child("photos and videos").child(task.getResult().getUser().getUid());
@@ -130,7 +130,6 @@ public class SignUp extends AppCompatActivity {
                                                         Log.e("Try custom pic", "" + taskSnapshot.getDownloadUrl().toString());
 
                                                         mDatabase.child("people").child(task.getResult().getUser().getUid()).child("village").setValue(villageString);
-
                                                         mDatabase.child("people").child(task.getResult().getUser().getUid()).child("displayNames").setValue(namestring);
                                                         mDatabase.child("people").child(task.getResult().getUser().getUid()).child("photoUrls").setValue(taskSnapshot.getDownloadUrl().toString());
                                                         mDatabase.child("people").child(task.getResult().getUser().getUid()).child("points").setValue("0");
@@ -157,15 +156,41 @@ public class SignUp extends AppCompatActivity {
                                             ex.printStackTrace();
                                         }
 
-                                        Intent i = new Intent(SignUp.this,SignIn.class);
+                                        rd.cancel();
                                         Toast.makeText(SignUp.this, "Account Successfully Created. Sign In for Security Purpose.", Toast.LENGTH_LONG).show();
-                                        startActivity(i);
+                                        startActivity(new Intent(SignUp.this,SignIn.class));
                                     }
                                 }
                             });
                 }
             }
         });
+    }
+
+    void init() {
+        setContentView(R.layout.activity_sign_up);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        imagesetter = (CircularImageView) findViewById(R.id.image);
+        uploadphotolabel = (TextView) findViewById(R.id.upload_label);
+        name = (EditText) findViewById(R.id.username);
+        email = (EditText) findViewById(R.id.email);
+        password = (EditText) findViewById(R.id.password);
+        village = (EditText) findViewById(R.id.village);
+        Signup = (Button) findViewById(R.id.signup1);
+        signintent = (TextView) findViewById(R.id.signinhere);
+
+        Typeface MontReg = Typeface.createFromAsset(getApplication().getAssets(), "Montserrat-Regular.otf");
+        Typeface MontBold = Typeface.createFromAsset(getApplication().getAssets(), "Montserrat-Bold.otf");
+        //Typeface MontHair = Typeface.createFromAsset(getApplication().getAssets(), "Montserrat-Hairline.otf");
+
+        uploadphotolabel.setTypeface(MontReg);
+        name.setTypeface(MontReg);
+        email.setTypeface(MontReg);
+        password.setTypeface(MontReg);
+        village.setTypeface(MontReg);
+        Signup.setTypeface(MontBold);
+        signintent.setTypeface(MontReg);
     }
 
     @Override
