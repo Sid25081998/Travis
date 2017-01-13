@@ -54,7 +54,6 @@ public class SignIn extends AppCompatActivity {
         Firebase.setAndroidContext(this);
         firebaseAuth = FirebaseAuth.getInstance();
 
-
         bt_signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
