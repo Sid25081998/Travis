@@ -15,8 +15,8 @@
 
         <activity android:name=".Activities.LoginRegisterChoose">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAINREG" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
@@ -30,8 +30,8 @@
             android:name=".FeedsActivity"
             android:label="Travis">
             <intent-filter>
-                <action android:name="android.intent.action.FEEDSACTIVITY" />
-                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 

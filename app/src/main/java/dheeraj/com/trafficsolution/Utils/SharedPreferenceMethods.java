@@ -10,11 +10,8 @@ public class SharedPreferenceMethods
     public static final String SHARED_PREFERENCE_NAME="travis_trafficApp_SharedPreference";
 
     // Variables
-    public static final String EVENT_NAME = "app_name";
-
-
     public static final String IS_LOGGED_IN = "app_name";
-
+    public static final boolean PEDESTRIAN_MODE = true;
 
     public static SharedPreferences.Editor getEditor(Context context)
     {

@@ -56,8 +56,8 @@ public class FeedsActivity extends AppCompatActivity implements PostsFragment.On
 
         //Adding Fragments!
 
-        adapter.addFragment(new CongestionFragment(), "Additional");
-        adapter.addFragment(PostsFragment.newInstance(PostsFragment.TYPE_FEED), "Feed");
+        adapter.addFragment(new GeoFenceFragment(), "Pedestrian");
+        //adapter.addFragment(PostsFragment.newInstance(PostsFragment.TYPE_FEED), "Feed");
         adapter.addFragment(new ParkingFragment(), "Parking");
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);
