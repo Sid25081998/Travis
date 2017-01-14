@@ -3,12 +3,14 @@ package dheeraj.com.trafficsolution;
 /**
  * Created by prasang7 on 10/1/17.
  */
+import android.*;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -29,6 +31,7 @@ public class GeoFenceService extends Service {
 
     // constant
     public static final long NOTIFY_INTERVAL = 15 * 1000; // 10 seconds
+
 
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
@@ -120,6 +123,7 @@ public class GeoFenceService extends Service {
             }
         }
 
+
         private void checkIntersection() {
 
             for (int i = 0; i < inter_lat.size(); i++){
@@ -135,7 +139,7 @@ public class GeoFenceService extends Service {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
                             .setSmallIcon(R.drawable.notification_icon)
                             .setContentTitle("Travis")
-                            .setContentText("Alert! There is a potential traffic hazard in your surrounding!");
+                            .setContentText("Alert! Potential Traffic Hazard Nearby!");
 
             Intent notificationIntent = new Intent(getApplicationContext(), FeedsActivity.class);
             PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent,
@@ -183,6 +187,8 @@ public class GeoFenceService extends Service {
             return (double) tmp / factor;
         }
     }
+
+
 
     void addIntersectionLocations() {
 

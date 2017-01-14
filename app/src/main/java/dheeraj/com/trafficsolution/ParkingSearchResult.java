@@ -89,8 +89,11 @@ public class ParkingSearchResult extends AppCompatActivity {
             double latitude = gps.getLatitude();
             double longitude = gps.getLongitude();
 
+            user_lat = latitude;
+            user_lon = longitude;
+
             // \n is for new line
-            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
         }else{
             // can't get location
             // GPS or Network is not enabled
@@ -100,8 +103,8 @@ public class ParkingSearchResult extends AppCompatActivity {
 
 
         // dummy location - Apna Sweets - Vijay Nagar!
-        user_lat = 22.7495949;
-        user_lon = 75.8934653;
+        //user_lat = 22.7495949;
+        //user_lon = 75.8934653;
         return true;
     }
 
