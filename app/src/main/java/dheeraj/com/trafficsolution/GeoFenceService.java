@@ -3,11 +3,19 @@ package dheeraj.com.trafficsolution;
 /**
  * Created by prasang7 on 10/1/17.
  */
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.support.v4.app.NotificationCompat;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -20,7 +28,7 @@ import java.util.TimerTask;
 public class GeoFenceService extends Service {
 
     // constant
-    public static final long NOTIFY_INTERVAL = 10 * 1000; // 10 seconds
+    public static final long NOTIFY_INTERVAL = 15 * 1000; // 10 seconds
 
     // run on another Thread to avoid crash
     private Handler mHandler = new Handler();
@@ -60,8 +68,6 @@ public class GeoFenceService extends Service {
         Toast.makeText(this, "Service Started", Toast.LENGTH_SHORT).show();
 
 
-
-
     }
 
     @Override
@@ -90,7 +96,6 @@ public class GeoFenceService extends Service {
             getUserLocation();
 
             checkIntersection();
-
         }
 
         private void getUserLocation() {
@@ -104,16 +109,14 @@ public class GeoFenceService extends Service {
                 double latitude = gps.getLatitude();
                 double longitude = gps.getLongitude();
 
-                user_lat = latitude;
-                user_long = longitude;
+                user_lat = 22.7524215;
+                user_long = 75.8924856;
 
                 // \n is for new line
                 Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
             }else{
-                // can't get location
-                // GPS or Network is not enabled
-                // Ask user to enable GPS/network in settings
-                gps.showSettingsAlert();
+                Toast.makeText(getApplicationContext(), "Can't get your location!", Toast.LENGTH_SHORT).show();
+                //gps.showSettingsAlert();
             }
         }
 
@@ -128,6 +131,20 @@ public class GeoFenceService extends Service {
 
         private void alertUser() {
             Toast.makeText(getApplicationContext(), "ALERT, Intersection nearby!", Toast.LENGTH_SHORT).show();
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext())
+                            .setSmallIcon(R.drawable.notification_icon)
+                            .setContentTitle("Travis")
+                            .setContentText("Alert! There is a potential traffic hazard in your surrounding!");
+
+            Intent notificationIntent = new Intent(getApplicationContext(), FeedsActivity.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentIntent(contentIntent);
+
+            // Add as notification
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.notify(0, builder.build());
         }
 
         private boolean closeDistance(double lat1, double lon1, double lat2, double lon2) {

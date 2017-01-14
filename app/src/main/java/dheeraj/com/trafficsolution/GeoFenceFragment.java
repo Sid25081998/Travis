@@ -40,7 +40,7 @@ public class GeoFenceFragment extends Fragment {
         init();
 
         //TODO: REMOVE THIS LINE OF CODE!
-        SharedPreferenceMethods.setBoolean(getActivity(), "PEDESTRIAN_MODE", true);
+        SharedPreferenceMethods.setBoolean(getActivity(), "PEDESTRIAN_MODE", false);
 
 
         // Get pedestrian mode data from sharedprefs
@@ -77,13 +77,13 @@ public class GeoFenceFragment extends Fragment {
     void startPedestrianMode() {
         Toast.makeText(getActivity(), "Pedestrian Mode Activated", Toast.LENGTH_LONG).show();
 
-        //getActivity().startService(new Intent(getActivity(), GeoFenceService.class));
+        getActivity().startService(new Intent(getActivity(), GeoFenceService.class));
     }
 
     void stopPedestrianMode() {
         Toast.makeText(getActivity(), "Pedestrian Mode Deactivated", Toast.LENGTH_LONG).show();
 
-        //getActivity().stopService(new Intent(getActivity(), GeoFenceService.class));
+        getActivity().stopService(new Intent(getActivity(), GeoFenceService.class));
     }
 
     void init() {
