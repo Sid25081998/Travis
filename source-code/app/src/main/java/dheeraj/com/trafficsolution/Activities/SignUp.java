@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -159,6 +160,7 @@ public class SignUp extends AppCompatActivity {
                                         rd.cancel();
                                         Toast.makeText(SignUp.this, "Account Successfully Created. Sign In for Security Purpose.", Toast.LENGTH_LONG).show();
                                         startActivity(new Intent(SignUp.this,SignIn.class));
+                                        finish();
                                     }
                                 }
                             });
@@ -212,5 +214,19 @@ public class SignUp extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5 && keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(SignUp.this, LoginRegisterChoose.class));
+        finish();
     }
 }

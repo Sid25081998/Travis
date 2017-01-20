@@ -17,7 +17,9 @@
 package dheeraj.com.trafficsolution;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,10 +28,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -56,7 +61,7 @@ public class PostsFragment extends Fragment {
     public static final int TYPE_FEED = 1002;
     private int mRecyclerViewPosition = 0;
     private OnPostSelectedListener mListener;
-
+    FloatingActionButton mFab;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter<PostViewHolder> mAdapter;
@@ -83,6 +88,20 @@ public class PostsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_posts, container, false);
         rootView.setTag(TAG);
+
+        mFab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user == null || user.isAnonymous()) {
+                    Toast.makeText(getActivity(), "You must sign-in to post.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Intent newPostIntent = new Intent(getActivity(), NewPostActivity.class);
+                startActivity(newPostIntent);
+            }
+        });
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
         return rootView;

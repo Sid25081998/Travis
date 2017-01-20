@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import dheeraj.com.trafficsolution.FeedsActivity;
 import dheeraj.com.trafficsolution.R;
+import dheeraj.com.trafficsolution.Utils.SharedPreferenceMethods;
 
 public class SignIn extends AppCompatActivity {
 
@@ -58,8 +60,8 @@ public class SignIn extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String emailid = email.getText().toString();
-                String passwordtext = password.getText().toString();
+                final String emailid = email.getText().toString();
+                final String passwordtext = password.getText().toString();
 
                 if (emailid == null) {
                     email.setError("You can not leave it blank.");
@@ -75,6 +77,7 @@ public class SignIn extends AppCompatActivity {
                     password.setError("You can not leave it blank.");
                 }
                 else {
+
                     final ProgressDialog rd = new ProgressDialog(SignIn.this);
                     rd.setTitle("Please Wait!");
                     rd.setMessage("Logging Into Your Account...");
@@ -126,22 +129,18 @@ public class SignIn extends AppCompatActivity {
                                             }
                                     );
 
-                                    Toast.makeText(SignIn.this, st_displayname + "-" + st_city, Toast.LENGTH_LONG).show();
-
-                                    //TODO: SAVE USER DATA HERE IN SHARED PREFS
+                                    SharedPreferenceMethods.setString(SignIn.this, SharedPreferenceMethods.IS_LOGGED_IN, "yes");
 
                                     rd.cancel();
-                                    startActivity(new Intent(getApplicationContext(), FeedsActivity.class));
+                                    startActivity(new Intent(SignIn.this, FeedsActivity.class));
                                     finish();
                                 }
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
-
                                     rd.cancel();
                                     Toast.makeText(SignIn.this, "Oops! Database Error. Please Try Again!", Toast.LENGTH_SHORT).show();
                                 }
-
                             });
                         }
                     });
@@ -165,5 +164,19 @@ public class SignIn extends AppCompatActivity {
         email.setTypeface(MontReg);
         password.setTypeface(MontReg);
         bt_signIn.setTypeface(MontBold);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5 && keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(SignIn.this, LoginRegisterChoose.class));
+        finish();
     }
 }

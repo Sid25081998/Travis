@@ -13,9 +13,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <activity
+            android:name=".Activities.MainActivity"
+            android:label="Travis">
+            <intent-filter>
+                <action android:name="android.intent.action.MAINACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".Activities.LoginRegisterChoose">
             <intent-filter>
-                <action android:name="android.intent.action.MAINREG" />
+                <action android:name="android.intent.action.LOGINREG" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -25,6 +34,7 @@
 
         <activity android:name=".Activities.SignUp"
             android:label="Travis - Sign Up"/>
+
 
         <activity
             android:name=".FeedsActivity"

@@ -17,6 +17,7 @@
 package dheeraj.com.trafficsolution;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -26,6 +27,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,41 +44,39 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import dheeraj.com.trafficsolution.Activities.LoginRegisterChoose;
+import dheeraj.com.trafficsolution.Utils.SharedPreferenceMethods;
+
 public class FeedsActivity extends AppCompatActivity implements PostsFragment.OnPostSelectedListener {
     private static final String TAG = "FeedsActivity";
-    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (SharedPreferenceMethods.getString(FeedsActivity.this, SharedPreferenceMethods.IS_LOGGED_IN).equals("yes")) {
+            init();
+        }
+        else {
+            startActivity(new Intent(FeedsActivity.this, LoginRegisterChoose.class));
+            finish();
+        }
+    }
+    
+    void init() {
         setContentView(R.layout.activity_feeds);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.feeds_view_pager);
         FeedsPagerAdapter adapter = new FeedsPagerAdapter(getSupportFragmentManager());
-
-        //Adding Fragments!
-
+        
         adapter.addFragment(new GeoFenceFragment(), "Pedestrian");
-        //adapter.addFragment(PostsFragment.newInstance(PostsFragment.TYPE_FEED), "Feed");
+        adapter.addFragment(PostsFragment.newInstance(PostsFragment.TYPE_FEED), "Feed");
         adapter.addFragment(new ParkingFragment(), "Parking");
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(1);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.feeds_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
-
-        mFab = (FloatingActionButton) findViewById(R.id.fab);
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user == null || user.isAnonymous()) {
-                    Toast.makeText(FeedsActivity.this, "You must sign-in to post.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Intent newPostIntent = new Intent(FeedsActivity.this, NewPostActivity.class);
-                startActivity(newPostIntent);
-            }
-        });
     }
 
     @Override
@@ -125,10 +125,17 @@ public class FeedsActivity extends AppCompatActivity implements PostsFragment.On
         if (id == R.id.action_settings) {
             // TODO: Add settings screen.
             return true;
-        } else if (id == R.id.action_profile) {
-            startActivity(new Intent(this, ProfileActivity.class));
+        }
+        if (id == R.id.action_logout) {
+            SharedPreferenceMethods.setString(FeedsActivity.this, SharedPreferenceMethods.IS_LOGGED_IN, "no");
+            startActivity(new Intent(FeedsActivity.this, LoginRegisterChoose.class));
+            finish();
             return true;
         }
+        /*else if (id == R.id.action_profile) {
+            startActivity(new Intent(this, ProfileActivity.class));
+            return true;
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -160,5 +167,19 @@ public class FeedsActivity extends AppCompatActivity implements PostsFragment.On
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5 && keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(FeedsActivity.this, "exit", Toast.LENGTH_SHORT).show();
+        finish();
     }
 }

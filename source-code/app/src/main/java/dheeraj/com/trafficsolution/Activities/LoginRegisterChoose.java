@@ -43,6 +43,7 @@ public class LoginRegisterChoose extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),SignUp.class));
+                finish();
             }
         });
 
@@ -50,6 +51,7 @@ public class LoginRegisterChoose extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),SignIn.class));
+                finish();
             }
         });
 
