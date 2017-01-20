@@ -3,14 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.google.firebase.samples.apps.friendlypix.FeedsActivity">
 
-    <!--
+
     <item
         android:id="@+id/action_profile"
         android:title="Profile"
         app:showAsAction="always"
         android:icon="@drawable/avatar">
     </item>
-   -->
     <item
         android:id="@+id/action_logout"
         android:orderInCategory="100"

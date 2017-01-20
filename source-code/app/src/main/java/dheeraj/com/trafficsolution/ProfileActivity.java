@@ -18,9 +18,13 @@ package dheeraj.com.trafficsolution;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -60,16 +64,17 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        init();
+
+    }
+
+    void init() {
         setContentView(R.layout.activity_profile);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Initialize authentication and set up callbacks
         mAuth = FirebaseAuth.getInstance();
-
-        // GoogleApiClient with Sign In
-
-
 
         mProfileUi = (ViewGroup) findViewById(R.id.profile);
         points = (TextView)findViewById(R.id.points);
@@ -79,7 +84,6 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
 
         findViewById(R.id.show_feeds_button).setOnClickListener(this);
         findViewById(R.id.sign_out_button).setOnClickListener(this);
-
         showSignedInUI(mAuth.getCurrentUser());
     }
 
@@ -104,14 +108,23 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                startActivity(new Intent(ProfileActivity.this, FeedsActivity.class));
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
 
     }
-
-
-
 
     private void handleFirebaseAuthResult(AuthResult result) {
         // TODO: This auth callback isn't being called after orientation change. Investigate.
@@ -175,10 +188,6 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         finish();
     }
 
-
-
-
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -194,5 +203,19 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.w(TAG, "onConnectionFailed:" + connectionResult);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+        if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5 && keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(ProfileActivity.this, FeedsActivity.class));
+        finish();
     }
 }
